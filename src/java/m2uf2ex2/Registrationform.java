@@ -8,7 +8,6 @@ package m2uf2ex2;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Alumne
  */
-public class Apartat1 extends HttpServlet {
+public class Registrationform extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,40 +31,28 @@ public class Apartat1 extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String text;
-            boolean primerCop = true;
-            Cookie[] cookies = request.getCookies();
-        
-        if(cookies != null) {
-            for(int i=0; i<cookies.length; i++) {
-                Cookie c = cookies[i];
-                if( (c.getName().equals("visitantRepetit")) &&
-                    (c.getValue().equals("Si"))) {
-                    primerCop = false;
-                }
-            }
-        }
-        
-        if(primerCop==true) {
-            Cookie returnVisitorCookie = new Cookie( "visitantRepetit", "Si" );
-            response.addCookie(returnVisitorCookie);
-            text = "Welcome Aboard";
-        }
-        else {
-            text = "Welcome Back";
-        }
+            /* TODO output your page here. You may use following sample code. */
             out.println("<link rel='stylesheet' href='./css/styles.css' type='text/css'/>");
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>"+text+"</title>");            
+            out.println("<title>Registering With Session</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>"+text+"</h1>");
+            out.println("<center><h1>Registering With Session</h1></center>");
+            out.println("<ul>");
+            out.println("<li><b>First Name: ");
+            out.println("</b><label>"+request.getParameter("name")+"</label></li>");
+            
+            out.println("<li><b>Last Name: ");
+            out.println("</b><label>"+request.getParameter("surname")+"</label></li>");
+            
+            out.println("<li><b>Email address: ");
+            out.println("</b><label>"+request.getParameter("email")+"</label></li>");
+            out.println("</ul>");
             out.println("</body>");
             out.println("</html>");
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
