@@ -30,17 +30,38 @@ public class ShowItems extends HttpServlet {
     HttpSession session = request.getSession();
     synchronized(session) {
       @SuppressWarnings("unchecked")
+              
       List<String> previousItems =
         (List<String>)session.getAttribute("previousItems");
+         
+      List<Integer> previousInteger =
+        (List<Integer>)session.getAttribute("previousInteger");
+      
+      boolean changedOld=false;
+      
       if (previousItems == null) {
         previousItems = new ArrayList<String>();
+        previousInteger = new ArrayList<Integer>();
       }
+      
       String newItem = request.getParameter("newItem");
       if ((newItem != null) &&
           (!newItem.trim().equals(""))) {
-        previousItems.add(newItem);
+        for(int i=0; i<previousItems.size();i++) {
+            if (previousItems.get(i).equalsIgnoreCase(newItem) && changedOld == false) {
+                previousInteger.set(i, previousInteger.get(i)+1);
+                changedOld=true;
+            }
+            
+        }
+        if (changedOld==false) {
+                previousItems.add(newItem);
+                previousInteger.add(1);
+            }
       }
       session.setAttribute("previousItems", previousItems);
+      session.setAttribute("previousInteger", previousInteger);
+      
       response.setContentType("text/html");
       PrintWriter out = response.getWriter();
       String title = "Items Purchased";
@@ -56,8 +77,9 @@ public class ShowItems extends HttpServlet {
         out.println("<I>No items</I>");
       } else {
         out.println("<UL>");
-        for(String item: previousItems) {
-          out.println("  <LI>" + item);
+        for(int i = 0; i<previousItems.size();i++) {
+          out.println("  <LI>" + previousItems.get(i)+" ("+ previousInteger.get(i)+")");
+          
         }
         out.println("</UL>");
       }
