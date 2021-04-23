@@ -54,6 +54,7 @@ public class showreferers extends HttpServlet {
             out.println("<link rel='stylesheet' href='./css/styles.css' type='text/css'/>");
             for (String urls : urlsAcumulades) {
                 out.println(urls);
+                out.println("<br>");
             }
             //Ho guarda en la array la actual
             request.getSession().setAttribute("urlsAcumulades", urlsAcumulades);
