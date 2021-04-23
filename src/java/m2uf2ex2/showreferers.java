@@ -7,6 +7,9 @@ package m2uf2ex2;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,17 +34,29 @@ public class showreferers extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            
+            //Array que guarda els urls
+            List<String> urlsAcumulades = (List<String>)request.getSession().getAttribute("urlsAcumulades");
+            
+            //Si es el primer cop crea una array
+            if (urlsAcumulades == null) {
+                urlsAcumulades = new ArrayList<>();
+            }
+            //Agafa el url de la pagina de on ve
+            URL url = new URL(request.getHeader("Referer"));
+            String urlProcedencia;
+            urlProcedencia = url.getProtocol() + "://" + url.getAuthority() + url.getPath();
+            //Si no existeix ho crea, en cas contrari no fa res
+            if (!urlsAcumulades.contains(urlProcedencia)) {
+                urlsAcumulades.add(urlProcedencia);
+            }
+            //El for per imprimir els elements
             out.println("<link rel='stylesheet' href='./css/styles.css' type='text/css'/>");
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Pages Linked From</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<center><h1>Pages Linked From</h1></center>");
-            out.println("</body>");
-            out.println("</html>");
+            for (String urls : urlsAcumulades) {
+                out.println(urls);
+            }
+            //Ho guarda en la array la actual
+            request.getSession().setAttribute("urlsAcumulades", urlsAcumulades);
         }
     }
 
